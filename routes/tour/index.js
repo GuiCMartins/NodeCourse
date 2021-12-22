@@ -17,4 +17,21 @@ router.get('/', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+    
+    const newId = tours[tours.length - 1].id + 1
+    const newTour = Object.assign({id: newId}, req.body);
+
+    tours.push(newTour);
+
+    fs.writeFile(FILE_PATH, JSON.stringify(tours), (err) => {
+        res.status(201).json({
+            status: "SUCCESS",
+            data: {
+                tour: newTour
+            }
+        })
+    });
+});
+
 module.exports = router

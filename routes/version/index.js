@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const tourRoute = require('../tour')
 
-router.use('/tour', tourRoute);
+router.use('/tours', tourRoute);
 
 module.exports = router
