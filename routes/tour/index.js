@@ -1,37 +1,17 @@
-const router = require('express').Router();
-const fs = require('fs')
+const router = require("express").Router();
+const { useTourController } = require("../../controllers");
 
-const FILE_PATH = './dev-data/data/tours-simple.json';
+const BASE_URL = "/tours";
+const tourController = useTourController();
 
-const tours = JSON.parse(
-    fs.readFileSync(FILE_PATH)
-)
+router.get(BASE_URL, tourController.getAllTours);
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        status: "SUCCESS",
-        results: tours.length,
-        data: {
-            tours
-        }
-    })
-});
+router.get(`${BASE_URL}/:id`, tourController.getOneTour);
 
-router.post('/', (req, res) => {
-    
-    const newId = tours[tours.length - 1].id + 1
-    const newTour = Object.assign({id: newId}, req.body);
+router.post(BASE_URL, tourController.createOneTour);
 
-    tours.push(newTour);
+router.patch(`${BASE_URL}/:id`, tourController.updateOneTour);
 
-    fs.writeFile(FILE_PATH, JSON.stringify(tours), (err) => {
-        res.status(201).json({
-            status: "SUCCESS",
-            data: {
-                tour: newTour
-            }
-        })
-    });
-});
+router.delete(`${BASE_URL}/:id`, tourController.deleteOneTour);
 
-module.exports = router
+module.exports = router;
