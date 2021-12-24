@@ -1,4 +1,4 @@
-const useCommonMiddleware = require('./common')
 const useTourMiddleware = require('./tour')
+const useUserMiddleware = require('./user')
 
-module.exports = { useCommonMiddleware, useTourMiddleware }
+module.exports = { useTourMiddleware, useUserMiddleware }

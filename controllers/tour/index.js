@@ -1,41 +1,96 @@
+const { TourModel } = require("../../models");
+
 const useTourController = () => {
-  const getAllTours = (req, res) => {
-    res.status(200).json({
-      status: "SUCCESS",
-    });
+  const getAllTours = async (req, res) => {
+    try {
+      const tours = await TourModel.find();
+
+      res.status(200).json({
+        status: "SUCCESS",
+        data: tours,
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: "FAIL",
+        message: err.message,
+      });
+    }
   };
 
-  const getOneTour = (req, res) => {
-    res.status(200).json({
-      status: "SUCCESS",
-    });
+  const getOneTour = async (req, res) => {
+    try {
+      const tour = await TourModel.findById(req.params.id);
+
+      res.status(200).json({
+        status: "SUCCESS",
+        data: tour,
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: "FAIL",
+        message: err.message,
+      });
+    }
   };
 
-  const createOneTour = (req, res) => {
-    res.status(201).json({
-      status: "SUCCESS",
-    });
+  const createOneTour = async (req, res) => {
+    try {
+      const tour = await TourModel.create(req.body);
+
+      res.status(201).json({
+        status: "SUCCESS",
+        data: tour,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
   };
 
-  const updateOneTour = (req, res) => {
-    res.status(200).json({
-      status: "SUCCES",
-    });
+  const updateOneTour = async (req, res) => {
+    try {
+      const tour = await TourModel.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+
+      res.status(200).json({
+        status: "SUCCESS",
+        data: tour,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
   };
 
-  const deleteOneTour = (req, res) => {
-    res.status(204).json({
-      status: "SUCCES",
-    });
+  const deleteOneTour = async (req, res) => {
+    try {
+      await TourModel.findByIdAndDelete(req.params.id);
+
+      res.status(200).json({
+        status: "SUCCESS",
+        message: "Tour deleted!",
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
   };
 
   return {
-      getAllTours,
-      getOneTour,
-      createOneTour,
-      updateOneTour,
-      deleteOneTour
-  }
+    getAllTours,
+    getOneTour,
+    createOneTour,
+    updateOneTour,
+    deleteOneTour,
+  };
 };
 
-module.exports = useTourController
+module.exports = useTourController;

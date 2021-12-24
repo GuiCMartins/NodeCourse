@@ -1,12 +1,8 @@
 const router = require("express").Router();
 const { useUserController } = require("../../controllers");
-const { useCommonMiddleware } = require("../../middlewares");
 
 const BASE_URL = "/users";
 const userController = useUserController();
-const commonMiddleware = useCommonMiddleware();
-
-router.param("id", commonMiddleware.checkId);
 
 router.get(BASE_URL, userController.getAllUsers);
 
