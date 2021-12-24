@@ -1,8 +1,12 @@
 const router = require("express").Router();
 const { useTourController } = require("../../controllers");
+const { useCommonMiddleware } = require("../../middlewares");
 
 const BASE_URL = "/tours";
 const tourController = useTourController();
+const commonMiddleware = useCommonMiddleware();
+
+router.param("id", commonMiddleware.checkId);
 
 router.get(BASE_URL, tourController.getAllTours);
 
