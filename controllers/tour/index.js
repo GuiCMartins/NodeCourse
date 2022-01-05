@@ -9,7 +9,9 @@ const useTourController = () => {
         (match) => `$${match}`
       );
 
-      const sort = req.query.sort ? req.query.sort : "-createdAt";
+      const sort = req.query.sort
+        ? req.query.sort.split(".").join(" ")
+        : "-createdAt";
       const fields = req.query.fields
         ? req.query.fields.split(".").join(" ")
         : "-__v";

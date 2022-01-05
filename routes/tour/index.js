@@ -1,8 +1,12 @@
 const router = require("express").Router();
 const { useTourController } = require("../../controllers");
+const { useTourMiddleware } = require("../../middlewares")
 
 const BASE_URL = "/tours";
 const tourController = useTourController();
+const tourMiddleware = useTourMiddleware()
+
+router.get(`${BASE_URL}/top-5-cheap`, tourMiddleware.aliasTopTours , tourController.getAllTours)
 
 router.get(BASE_URL, tourController.getAllTours);
 
