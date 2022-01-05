@@ -1,38 +1,23 @@
 const { TourModel } = require("../../models");
+const { useGeneralApiFeatures } = require('../../utils')
 
 const useTourController = () => {
+
+  const generalApiFeatures = useGeneralApiFeatures();
+
   const getAllTours = async (req, res) => {
     try {
-      let queryStr = JSON.stringify(req.query);
-      queryStr = queryStr.replace(
-        /\b(gte|gt|lte|lt)\b/g,
-        (match) => `$${match}`
-      );
+      
+      const queryStr = generalApiFeatures.filter(req.query);
+      const sort = generalApiFeatures.sort(req.query);
+      const limitFields = generalApiFeatures.limitFields(req.query);
+      const pagination = generalApiFeatures.pagination(req.query);
 
-      const sort = req.query.sort
-        ? req.query.sort.split(".").join(" ")
-        : "-createdAt";
-      const fields = req.query.fields
-        ? req.query.fields.split(".").join(" ")
-        : "-__v";
-      const page = Number(req.query.page) || 1;
-      const limit = Number(req.query.limit) || 5;
-      const skip = (page - 1) * limit;
-
-      if (req.query.page) {
-        const numberOfTours = await TourModel.count();
-        if (skip >= numberOfTours) {
-          throw new Error("This page does not exist!");
-        }
-      }
-
-      let query = await TourModel.find(JSON.parse(queryStr))
+      const tours = await TourModel.find(JSON.parse(queryStr))
         .sort(sort)
-        .select(fields)
-        .skip(skip)
-        .limit(limit);
-
-      const tours = query;
+        .select(limitFields)
+        .skip(pagination.skip)
+        .limit(pagination.limit);
 
       res.status(200).json({
         status: "SUCCESS",
