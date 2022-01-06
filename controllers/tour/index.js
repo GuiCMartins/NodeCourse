@@ -99,12 +99,49 @@ const useTourController = () => {
     }
   };
 
+  const getStats = async (req, res) => {
+    try{
+
+      const stats = await TourModel.aggregate([
+        {
+          $match: { ratingAverage: { $gte: 4.5 } }
+        },
+        {
+          $group: { 
+            _id: { $toUpper: '$difficulty'},
+            numTours: { $sum: 1 },
+            numRatings: { $sum: '$ratingQuantity' },
+            avgRating: { $avg: '$ratingAverage' },
+            avgPrice: { $avg: '$price' },
+            minPrice: { $min: '$price' },
+            maxPrice: { $max: '$price' }
+          }
+        },
+        {
+          $sort: { avgPrice: -1 }
+        }
+      ])
+
+      res.status(200).json({
+        status: "SUCCESS",
+        data: stats,
+      });
+
+    } catch (err) {
+      return res.status(500).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
+  }
+
   return {
     getAllTours,
     getOneTour,
     createOneTour,
     updateOneTour,
     deleteOneTour,
+    getStats
   };
 };
 

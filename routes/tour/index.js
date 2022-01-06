@@ -8,6 +8,8 @@ const tourMiddleware = useTourMiddleware()
 
 router.get(`${BASE_URL}/top-5-cheap`, tourMiddleware.aliasTopTours , tourController.getAllTours)
 
+router.get(`${BASE_URL}/tour-stats` , tourController.getStats)
+
 router.get(BASE_URL, tourController.getAllTours);
 
 router.get(`${BASE_URL}/:id`, tourController.getOneTour);
