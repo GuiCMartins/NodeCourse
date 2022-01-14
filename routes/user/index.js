@@ -1,8 +1,12 @@
 const router = require("express").Router();
 const { useUserController } = require("../../controllers");
+const { useAuthController } = require("../../controllers");
 
 const BASE_URL = "/users";
 const userController = useUserController();
+const authController = useAuthController();
+
+router.post(`${BASE_URL}/signup`, authController.signUp)
 
 router.get(BASE_URL, userController.getAllUsers);
 

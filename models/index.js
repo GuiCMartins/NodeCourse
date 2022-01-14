@@ -1,3 +1,4 @@
 const TourModel = require('./tour');
+const UserModel = require('./user')
 
-module.exports = { TourModel }
+module.exports = { TourModel, UserModel }

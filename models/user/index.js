@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         unique: [true, 'Email must be unique'],
         lowercase: true,
         validate: {
-            validator: validator.email,
+            validator: validator.isEmail,
             message: "Email must be valid",
         }
     },

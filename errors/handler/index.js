@@ -13,7 +13,10 @@ const useErrorHandler = () => {
 
   const asyncCatch = (fn) => {
     return (req, res, next) => {
-      fn(req, res, next).catch(next);
+      fn(req, res, next).catch(err => {
+        console.log("Erro: ", err);
+        next(err);
+      });
     };
   };
 
