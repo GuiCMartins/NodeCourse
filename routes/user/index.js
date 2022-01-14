@@ -8,6 +8,8 @@ const authController = useAuthController();
 
 router.post(`${BASE_URL}/signup`, authController.signUp)
 
+router.post(`${BASE_URL}/login`, authController.login)
+
 router.get(BASE_URL, userController.getAllUsers);
 
 router.get(`${BASE_URL}/:id`, userController.getOneUser);

@@ -1,9 +1,20 @@
+const { UserModel } = require('../../models')
+const { useErrorHandler } = require('../../errors')
+
 const useUserController = () => {
-  const getAllUsers = (req, res) => {
+
+  const errorHandler = useErrorHandler();
+
+  const getAllUsers = errorHandler.asyncCatch(async (req, res) => {
+
+    const users = await UserModel.find();
+
     res.status(200).json({
       status: "SUCCESS",
+      results: users.length,
+      data: users,
     });
-  };
+  });
 
   const getOneUser = (req, res) => {
     res.status(200).json({
