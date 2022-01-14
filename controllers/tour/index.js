@@ -1,6 +1,7 @@
 const { TourModel } = require("../../models");
 const { useErrorHandler } = require('../../errors')
 const { useGeneralApiFeatures } = require("../../utils");
+const { AppError } = require('../../errors');
 
 const useTourController = () => {
   const generalApiFeatures = useGeneralApiFeatures();
@@ -28,6 +29,10 @@ const useTourController = () => {
   const getOneTour = errorHandler.asyncCatch(async (req, res, next) => {
     const tour = await TourModel.findById(req.params.id);
 
+    if(!tour){
+      return next(new AppError(`Can't find a tour with this ID!`, 404));
+    }
+
     res.status(200).json({
       status: "SUCCESS",
       data: tour,
@@ -49,6 +54,10 @@ const useTourController = () => {
       runValidators: true,
     });
 
+    if(!tour){
+      return next(new AppError(`Can't find a tour with this ID!`, 404));
+    }
+
     res.status(200).json({
       status: "SUCCESS",
       data: tour,
@@ -56,7 +65,11 @@ const useTourController = () => {
   });
 
   const deleteOneTour = errorHandler.asyncCatch(async (req, res, next) => {
-    await TourModel.findByIdAndDelete(req.params.id);
+    const tour = await TourModel.findByIdAndDelete(req.params.id);
+
+    if(!tour){
+      return next(new AppError(`Can't find a tour with this ID!`, 404));
+    }
 
     res.status(200).json({
       status: "SUCCESS",

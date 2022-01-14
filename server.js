@@ -7,10 +7,26 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("DB connection successfull!"))
-  .catch((err) => console.log(err));
+  .then(() => console.log("DB connection successfull!"));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+
+const server = app.listen(PORT, () => {
   console.log(`Listen to port: ${PORT} ....`);
 });
+
+process.on('unhandledRejection', err => {
+  console.log(err.name, err.message);
+  console.log('Shutting down UNHANDLED REJECTION....');
+  server.close(() => {
+    process.exit(1);
+  });
+})
+
+process.on('uncaughtException', err => {
+  console.log(err.name, err.message);
+  console.log('Shutting down UNCAUGHT EXCEPTION....');
+  server.close(() => {
+    process.exit(1);
+  });
+})

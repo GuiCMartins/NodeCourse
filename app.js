@@ -1,5 +1,5 @@
 const express = require("express");
-const { AppError } = require('./utils')
+const { AppError } = require('./errors')
 const { useErrorHandler } = require('./errors')
 const { TourRouter } = require("./routes");
 const { UserRouter } = require("./routes");
